@@ -201,8 +201,15 @@ public:
 								else {
 									int op1 = stack->pop();
 									int op2 = stack->pop();
-									stack->push(calc(op1, op->pop(), op2));
-									topop = isop(op->toppriority());
+									char tmpop = op->pop();
+									if (tmpop == '/' && op1 == 0) {
+										isok = 0;
+										break;
+									}
+									else {
+										stack->push(calc(op1, tmpop, op2));
+										topop = isop(op->toppriority());
+									}
 								}
 							}
 							op->pop();
@@ -225,7 +232,15 @@ public:
 									else {
 										int op1 = stack->pop();
 										int op2 = stack->pop();
-										stack->push(calc(op1, op->pop(), op2));
+										char tmpop = op->pop();
+										if (tmpop == '/' && op1 == 0) {
+											isok = 0;
+											break;
+										}
+										else {
+											stack->push(calc(op1, tmpop, op2));
+											topop = isop(op->toppriority());
+										}
 									}
 								}
 								op->push(input[i]);
@@ -245,8 +260,14 @@ public:
 			else {
 				int op1 = stack->pop();
 				int op2 = stack->pop();
-
-				stack->push(calc(op1, op->pop(), op2));
+				char tmpop = op->pop();
+				if (tmpop == '/' && op1 == 0) {
+					isok = 0;
+					break;
+				}
+				else {
+					stack->push(calc(op1, tmpop, op2));
+				}
 			}
 		}
 	}
@@ -290,7 +311,7 @@ public:
 			state = "연산 결과 : " + to_string(model->getstack()->pop());
 		}
 		else {
-			state = "잘못된 입력입니다.";
+			state = "잘못된 입력/수식 입니다.(수식과 괄호쌍이 제대로 작성되었는지, 나누는 수가 0은 아닌지 확인해주세요.)";
 		}
 		view->printresultmsg(state);
 	}
